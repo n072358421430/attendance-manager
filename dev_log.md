@@ -156,6 +156,11 @@
 
 ---
 
+## 💡 [PT 발표 노트]
+- `presentation_notes.md`로 옮김 (2026-11-04).
+
+---
+
 ## 2026-11-02 (UX 텍스트 전면 개편 & 단일 파일 배포판 구축)
 
 ### 1. 작업 내용 (What)
@@ -343,6 +348,7 @@
 - **dev_log.md 정리** (사용자 요청):
   - 과장 표현("완벽히", "100% 동일/동작", "혁신적 전환", "몰입도 극대화", "필살기" 등) 25줄 수정. 기능·원인·해결·수치 내용은 유지.
   - 2026-10-29 섹션의 "잔여 패널티 누적 카운트 분리" 아래에 운영팀 답변 기준 보충 설명 추가.
+  - PT 발표 노트를 `presentation_notes.md`로 이동.
 
 ### 2. 발생한 문제 (Problem)
 - 같은 기록에서 "전체 결석 한도" 카드와 "전체 출석률" 카드의 결석 일수가 다르게 나옴.
@@ -378,8 +384,14 @@
 - **README.md 생성** (GitHub 공개용):
   - 내용: 앱 소개, 사용 방법(html과 js를 같은 폴더에 두고 열기), 메뉴별 기능 4개, 계산 규칙 표와 지각·조퇴·외출 환산 예시, 데이터 저장 방식(localStorage, 백업·복원, AI 상담 시 외부 전송), 파일 구성, 사용 기술.
   - 메뉴 이름·저장 키·라이브러리는 `attendance-manager.html` 코드에서 확인해 작성.
-  - GitHub에 올릴 파일: `attendance-manager.html`, `form_template_b64.js`, `dev_log.md`, `CLAUDE.md`, `GEMINI.md`, `README.md`.
-- **CLAUDE.md·GEMINI.md 정리**: 작성 원칙 5번을 "고친 파일명과 위치(함수명, 화면 이름 등)를 적는다"로 바꾸고, 6번 "개발 기록만 쓴다"를 추가. 두 파일 내용을 같게 맞춤.
+  - GitHub에 올릴 파일: `attendance-manager.html`, `form_template_b64.js`, `dev_log.md`, `CLAUDE.md`, `GEMINI.md`, `README.md`. `presentation_notes.md`는 제외.
+- **CLAUDE.md·GEMINI.md 수정** (GitHub 공개용 정리):
+  - 저장소에 올리지 않는 파일을 가리키던 부분 정리. "발표 자료(presentation_notes.md)" 항목 → "로그에 쓰지 않는 것"(dev_log에는 개발 기록만, 발표용 문구 제외)으로 변경. 작성 원칙 5번의 파일 목록(`_draft`, `iPad_배포용/`) 삭제 → "고친 파일명과 위치를 적는다"로 변경.
+  - 두 파일에서 달랐던 한 줄("기존 로그와 같은 형식을 따른다.")을 GEMINI.md에도 추가해 내용 일치.
+- **규칙 파일 작업용·GitHub용 분리**:
+  - G드라이브(작업용) `CLAUDE.md`·`GEMINI.md`: 발표 자료 항목과 파일 목록(`_draft`, `iPad_배포용/`)이 있는 원래 버전으로 되돌림.
+  - `C:\kimcoding\attendance-manager\`(GitHub용) `CLAUDE.md`·`GEMINI.md`: 발표 자료 항목을 빼고, 작성 원칙 5번을 "고친 파일명과 위치를 적는다", 6번 "개발 기록만 쓴다"로 정리한 버전.
+  - 파일 이름은 두 곳 모두 `CLAUDE.md`·`GEMINI.md`로 같음 (도구가 정해진 이름만 읽기 때문).
 - **README.md 과정 정보 수정** (사용자 지적):
   - 문제: "KDT 5기"처럼 KDT를 과정 이름으로 씀. KDT는 고용노동부 주관 디지털 직업훈련 사업(K-디지털 트레이닝) 전체를 가리키는 말이고, 5기는 이 과정의 기수임. "공식 출결 기록은 고용24·HRD-Net 기준"은 자료에 없는 문장을 추정으로 씀.
   - 원인: 앱 프롬프트·기존 로그의 "KDT 5기" 표기를 그대로 가져옴. 출결 문장은 근거 확인 없이 작성.
@@ -399,3 +411,11 @@
   - "동아 AI LAB 5기 : 출결·장려금 포털 (Patreon Clean)" → "출결·장려금 매니저 | 동아 AI Lab AI Agent 5기"
   - 탭에는 앞부분만 보이므로 앱 이름을 앞에 둠. 앱 이름은 "매니저"로 통일(README와 같음). 작업용 이름 "(Patreon Clean)" 삭제.
   - 검증: 코드 수정만 함. 브라우저 확인은 미확인.
+- **GitHub 업로드용 파일 준비** (v1.0.1):
+  - `C:\kimcoding\attendance-manager\`에 `attendance-manager.html`, `form_template_b64.js`, `README.md`, `dev_log.md` 복사. `CLAUDE.md`·`GEMINI.md`는 앞서 넣어 둔 GitHub용 버전 유지.
+  - 공개용 `dev_log.md`에서 제외한 내용: "PT 발표 노트" 섹션, PT 노트 이동 기록, presentation_notes 제외 문구, 규칙 파일 작업용·GitHub용 분리 기록(공개본에는 "CLAUDE.md·GEMINI.md 정리" 한 줄로 대체). 이 항목도 작업용 로그에만 있음.
+  - GitHub에는 압축하지 않고 파일 6개를 그대로 올림. 제출은 GitHub 저장소 URL 공유로 함.
+- **README에 "바로 사용하기" 링크 추가** (`README.md` 맨 위):
+  - GitHub Pages 주소 `https://n072358421430.github.io/attendance-manager/attendance-manager.html`로 연결. Pages 짧은 주소(`.../attendance-manager/`)는 index.html이 없어 README가 첫 화면으로 보이는데, README에 앱으로 가는 링크가 없었음.
+  - 이동용 index.html은 관리 부담 때문에 추가하지 않음. 앱 기능 변경이 없으므로 버전은 v1.0.1 유지.
+  - 검증: Pages 주소 3개(앱 html, js, 짧은 주소) 응답 200 확인. 링크 클릭은 미확인.
