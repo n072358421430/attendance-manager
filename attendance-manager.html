@@ -54,6 +54,30 @@
         #aiAuditResult p {
             margin-bottom: 6px;
         }
+    
+        /* 투명 미니멀 스크롤바 디자인 (화살표 제거 & 초슬림) */
+        .custom-slim-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+        }
+        .custom-slim-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-slim-scroll::-webkit-scrollbar-button {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+        .custom-slim-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-slim-scroll::-webkit-scrollbar-thumb {
+            background-color: rgba(148, 163, 184, 0.3);
+            border-radius: 9999px;
+        }
+        .custom-slim-scroll:hover::-webkit-scrollbar-thumb {
+            background-color: rgba(100, 116, 139, 0.5);
+        }
     </style>
 </head>
 
@@ -360,7 +384,7 @@
                     </div>
                 </div>
 
-                <ul id="attList" class="divide-y divide-slate-100 text-xs"></ul>
+                <ul id="attList" class="divide-y divide-slate-100 text-xs max-h-[235px] overflow-y-auto pr-1.5 custom-slim-scroll"></ul>
             </div>
         </section>
 
@@ -817,6 +841,23 @@
     
 <script>
 
+        function getDayOfWeek(dateStr) {
+            if (!dateStr) return '';
+            try {
+                const days = ['일', '월', '화', '수', '목', '금', '토'];
+                const parts = dateStr.split('-');
+                if (parts.length === 3) {
+                    const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                    return days[d.getDay()] || '';
+                }
+            } catch (e) {
+                console.error(e);
+            }
+            return '';
+        }
+
+
+
         // ----------------------------------------------------
         // [Patreon 스타일] 좌측 사이드바 뷰 전환 함수
         // ----------------------------------------------------
@@ -1099,7 +1140,7 @@
                 li.innerHTML = `
                     <div class="flex items-center gap-2 flex-wrap">
                         <span class="text-[11px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap ${badgeColor}">${escapeHtml(r.type)}</span>
-                        <span class="font-bold text-slate-700 whitespace-nowrap">${escapeHtml(r.date)}</span>
+                        <span class="font-bold text-slate-700 whitespace-nowrap">${escapeHtml(r.date)}(${getDayOfWeek(r.date)})</span>
                         <span class="text-slate-400 whitespace-nowrap">(${rRound}차)</span>
                         ${r.memo ? `<span class="text-slate-600 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-200">${escapeHtml(r.memo)}</span>` : ''}
                     </div>
