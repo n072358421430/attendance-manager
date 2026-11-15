@@ -444,3 +444,40 @@
   - 메인 `<script>` 블록 최상단에 `getDayOfWeek` 함수를 명시적으로 선언하여 DOM 렌더링 시점 이전에 즉시 호출 가능하도록 보장.
 - **실제 렌더링 단위 높이 역산 및 보정**:
   - 항목당 세로 높이(패딩 `py-2` 16px + 텍스트 16px + 마진 등 약 39px)를 실측하여, 6개 항목 높이에 정확히 일치하는 `max-h-[235px]`(39px × 6 = 234px)로 정밀 조정 완료.
+
+---
+
+## 8. 2026-11-10 (v1.0.3 업데이트)
+
+### 1. 작업 내용 (What)
+- **출결 변동 사유에 '공가' 추가** (`attendance-manager.html`, `attendance-manager_v1.0.3/attendance-manager.html`):
+  - `#typeInput` 드롭다운 선택지에 `공가 (출석인정 · 총 13일(전체 출석일의 10%))` 항목 추가 및 선택창 너비를 `w-48`에서 `w-80`으로 확장.
+  - 출결 변동 기록 필터 바에 `#filterBtn-공가`, `#tagCount-공가` 버튼 추가 및 목록 내 하늘색 배지(`bg-sky-100 text-sky-700`) 스타일 지정.
+  - 당일 중복 등록 방지 배열(`fullDay = ['결석', '휴가', '공가']`)에 포함하고, 출석인정 사유이므로 순수 결석(`pureAbsence`)에는 합산하지 않도록 처리 (예: 2차 기간 중 공가 1일 등록 → 2차 결석 0일, 출석률 100.0% 유지).
+
+### 2. 검증 (Verification)
+- 코드 수정 반영 확인. 브라우저 실행 확인은 미확인.
+
+---
+
+## 9. 2026-11-16 (v1.0.4 업데이트)
+
+### 1. 작업 내용 (What)
+- **수업 일차 자동 계산 및 상단 탭 바 우측 표시** (`attendance-manager.html`, `attendance-manager_v1.0.4/attendance-manager.html`):
+  - 단위기간 탭 바(`#unitTabs` 우측, 4번째 카드 `제적까지 남은 결석` 상단 영역)에 `#courseDayDisplay` 요소(`text-xs`)를 추가.
+  - `getKstDateString()` 함수로 한국 표준시(`Asia/Seoul`) 기준 날짜(`YYYY-MM-DD`)를 구하고, `getCourseDayInfo(targetDateStr)` 함수로 개강일(`2026-09-29` = 1일차)부터 종강일(`2027-04-07` = 130일차)까지 주말(토·일)과 지정 휴강일(`HOLIDAYS` 7일)을 제외한 평일 강의일수를 누적 계산 (외부 특강일도 평일 수업일에 포함).
+  - 예: `2026-09-29(화)` → `1일차 / 130일`, `2026-11-16(월)` → `2026-11-16(월) · 33일차 / 130일`, 주말·공휴일(예: `2026-11-15(일)`) → `2026-11-15(일) 휴강 · 누적 32일차 / 130일`로 표시.
+  - 1분 간격(`setInterval`)으로 KST 날짜 변경 여부를 확인하여 자정이 지나면 새로고침 없이도 일차수와 현재 차수가 자동 갱신되도록 처리.
+- **AI 상담 프롬프트 집계 변수 선언 보완** (`attendance-manager.html`, `attendance-manager_v1.0.3/attendance-manager.html`의 `buildStructuredPrompt()`):
+  - `officialLeave`, `totalOfficialLeaveAll` 변수가 `let` 선언 없이 사용되던 부분을 초기값 `0`으로 명시 선언하도록 수정.
+
+### 2. 발생한 문제 (Problem)
+- `buildStructuredPrompt()` 내부에서 `공가` 기록이 있을 때 `totalOfficialLeaveAll`이 선언되지 않아 `ReferenceError`가 발생할 수 있었음.
+
+### 3. 원인 분석 및 해결 (Troubleshooting)
+- **원인**: v1.0.3에서 공가 사유를 추가할 때 `saveAndRender()`에는 변수 선언을 넣었으나 `buildStructuredPrompt()`에는 선언이 누락됨.
+- **해결**: `buildStructuredPrompt()` 상단 집계 변수 선언부에 `officialLeave = 0`, `totalOfficialLeaveAll = 0`을 추가.
+- **근거**: 학사규정 데이터 (`훈련기간: 2026.09.29 ~ 2027.04.07, 총 130일`, `지정 휴강일 총 7일: 10/5, 10/9, 12/25, 1/1, 2/8, 2/9, 3/1`).
+
+### 4. 검증 (Verification)
+- 1차(20일) + 2차(`2026-10-29` ~ `2026-11-16` 평일 13일) = 33일차, 전체 기간(`2026-09-29` ~ `2027-04-07`) 총 130일차 계산 일치 확인. 브라우저 화면 표시 확인은 사용자가 직접 확인 필요.

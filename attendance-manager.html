@@ -174,8 +174,9 @@
             </div>
 
             <!-- 단위기간 탭 바 (패트리온 스타일 가로 언더라인 탭) -->
-            <div class="border-b border-slate-200">
+            <div class="border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
                 <div class="flex items-center gap-6 overflow-x-auto pb-0.5" id="unitTabs"></div>
+                <div id="courseDayDisplay" class="pb-2.5 text-xs font-semibold text-slate-500 whitespace-nowrap flex items-center gap-1.5 pr-0.5"></div>
             </div>
 
             <!-- 상단 4대 핵심 지표 (사용자 편집 그대로: 상단 중앙 폼 1개 + 카드 내부 텍스트) -->
@@ -928,10 +929,74 @@
             { round: 7, start: '2027-04-01', end: '2027-04-07', totalDays: 5 }
         ];
 
-        // 컴퓨터 시계에서 오늘 날짜(YYYY-MM-DD) 추출
-        const todayStr = new Date().toLocaleDateString('sv-SE');
+        // 한국 표준시(KST) 기준 오늘 날짜(YYYY-MM-DD) 추출
+        function getKstDateString(date = new Date()) {
+            return date.toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' });
+        }
+
+        // 개강일(2026-09-29 = 1일차) 기준 KST 강의 일차 계산 (주말·공휴일 제외, 외부 특강 포함)
+        function getCourseDayInfo(targetDateStr) {
+            const courseStart = UNIT_PERIODS[0].start;
+            const courseEnd = UNIT_PERIODS[UNIT_PERIODS.length - 1].end;
+            const [sy, sm, sd] = courseStart.split('-').map(Number);
+            const [ey, em, ed] = courseEnd.split('-').map(Number);
+            const cur = new Date(sy, sm - 1, sd);
+            const end = new Date(ey, em - 1, ed);
+
+            let dayCount = 0;
+            let currentDayCount = 0;
+            let isTodayLectureDay = false;
+
+            while (cur <= end) {
+                const yyyy = cur.getFullYear();
+                const mm = String(cur.getMonth() + 1).padStart(2, '0');
+                const dd = String(cur.getDate()).padStart(2, '0');
+                const dStr = `${yyyy}-${mm}-${dd}`;
+                const dow = cur.getDay();
+                const isLecture = (dow !== 0 && dow !== 6 && !HOLIDAYS[dStr]);
+
+                if (isLecture) {
+                    dayCount++;
+                }
+                if (dStr <= targetDateStr) {
+                    currentDayCount = dayCount;
+                    if (dStr === targetDateStr) {
+                        isTodayLectureDay = isLecture;
+                    }
+                }
+                cur.setDate(cur.getDate() + 1);
+            }
+
+            return {
+                dayNumber: currentDayCount,
+                totalDays: TOTAL_DAYS,
+                isLectureDay: isTodayLectureDay,
+                holidayName: HOLIDAYS[targetDateStr] || '',
+                isBeforeStart: targetDateStr < courseStart,
+                isAfterEnd: targetDateStr > courseEnd
+            };
+        }
+
+        function renderCourseDay() {
+            const el = document.getElementById('courseDayDisplay');
+            if (!el) return;
+            const info = getCourseDayInfo(todayStr);
+            const dow = getDayOfWeek(todayStr);
+            if (info.isBeforeStart) {
+                el.innerHTML = `<span class="text-slate-400 font-medium">${todayStr}(${dow})</span><span class="text-slate-300">·</span><span class="font-bold text-slate-700">개강 전</span><span class="text-slate-400 font-medium">(총 ${info.totalDays}일)</span>`;
+            } else if (info.isAfterEnd) {
+                el.innerHTML = `<span class="text-slate-400 font-medium">${todayStr}(${dow})</span><span class="text-slate-300">·</span><span class="font-extrabold text-slate-800">${info.totalDays}일차 완료</span><span class="text-slate-400 font-medium">/ ${info.totalDays}일</span>`;
+            } else if (info.isLectureDay) {
+                el.innerHTML = `<span class="text-slate-400 font-medium">${todayStr}(${dow})</span><span class="text-slate-300">·</span><span class="font-extrabold text-slate-800">${info.dayNumber}일차</span><span class="text-slate-400 font-medium">/ ${info.totalDays}일</span>`;
+            } else {
+                const restLabel = info.holidayName ? `휴강(${info.holidayName})` : '휴강';
+                el.innerHTML = `<span class="text-slate-400 font-medium">${todayStr}(${dow}) ${restLabel}</span><span class="text-slate-300">·</span><span class="font-bold text-slate-700">누적 ${info.dayNumber}일차</span><span class="text-slate-400 font-medium">/ ${info.totalDays}일</span>`;
+            }
+        }
+
+        let todayStr = getKstDateString();
         let selectedRound = getRoundByDate(todayStr);   // 대시보드 탭 조회용 (기본값: 오늘 차수)
-        const currentRound = getRoundByDate(todayStr);  // 오늘이 속한 차수 (고정)
+        let currentRound = getRoundByDate(todayStr);    // 오늘이 속한 차수 (고정)
         // 확인서 기본 차수: 오늘 기준 가장 최근에 끝난 차수 (아직 1차 진행 중이면 1차)
         function getDefaultCertRound() {
             const ended = UNIT_PERIODS.filter(p => p.end < todayStr);
@@ -1382,7 +1447,23 @@
         }
 
         renderTabs();
+        renderCourseDay();
         saveAndRender();
+
+        // 자정(KST)이 지나 날짜가 바뀌면 일차수와 차수를 자동 갱신
+        setInterval(() => {
+            const newToday = getKstDateString();
+            if (newToday !== todayStr) {
+                const prevRound = currentRound;
+                todayStr = newToday;
+                currentRound = getRoundByDate(todayStr);
+                if (selectedRound === prevRound) selectedRound = currentRound;
+                certRound = getDefaultCertRound();
+                renderTabs();
+                renderCourseDay();
+                saveAndRender();
+            }
+        }, 60000);
 
 
 
@@ -1701,17 +1782,17 @@
             const curP = UNIT_PERIODS.find(p => p.round === currentRound);
             const roundRecords = records.filter(r => getRoundByDate(r.date) === currentRound);
 
-            let pureAbsence = 0, late = 0, early = 0, out = 0, vacation = 0;
+            let pureAbsence = 0, late = 0, early = 0, out = 0, vacation = 0, officialLeave = 0;
             roundRecords.forEach(r => {
                 if (r.type === '결석') pureAbsence++;
                 else if (r.type === '지각') late++;
                 else if (r.type === '조퇴') early++;
                 else if (r.type === '외출') out++;
                 else if (r.type === '휴가') vacation++;
-                else if (r.type === '공가') officialLeave = (officialLeave || 0) + 1;
+                else if (r.type === '공가') officialLeave++;
             });
 
-            let totalPureAbsenceAll = 0, totalPenaltyAll = 0, totalVacationAll = 0;
+            let totalPureAbsenceAll = 0, totalPenaltyAll = 0, totalVacationAll = 0, totalOfficialLeaveAll = 0;
             records.forEach(r => {
                 if (r.type === '결석') totalPureAbsenceAll++;
                 else if (r.type === '지각' || r.type === '조퇴' || r.type === '외출') totalPenaltyAll++;
