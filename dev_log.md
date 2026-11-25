@@ -608,3 +608,11 @@
 - 저장소 내 6개 파일 전체에서 `<<<<<<<`, `=======`(단독 줄), `>>>>>>>` 검색 결과 0건 확인.
 - `attendance-manager.html` 내 `<script>` 블록 `node --check` 문법 검사 통과.
 - GitHub `origin/main` 푸시는 Windows 자격 증명 입력 대기(Git Credential Manager)가 필요해 사용자가 직접 푸시 및 GitHub Pages 화면 확인 필요 (미확인).
+
+※ 2026-11-25 보충:
+- **수정한 항목**: `C:\kimcoding\attendance-manager\`(GitHub 저장소)의 `CLAUDE.md`, `GEMINI.md`를 작업용 원본(`g:\내 드라이브\attendance-manager\`)과 같은 내용으로 교체했다. 이전 정리 커밋(`ff732fc`)에서 `170eb3b` 기준 버전을 남기면서 빠졌던 다음 두 항목을 다시 넣었다.
+  - 작성 원칙 5번의 HTML 파일 구분 목록 (`attendance-manager.html`, `attendance-manager_draft.html`·`attendance-manager_draft_backup.html`, `iPad_배포용/attendance-manager.html`)
+  - `## 발표 자료 (presentation_notes.md)` 섹션
+  - 저장소 버전에만 있던 6번 "개발 기록만 쓴다" 항목은 작업용 원본에 없어 빠졌다.
+- **검증**: 교체 후 `diff`로 작업용 원본과 내용이 같은지 확인. 저장소 내 충돌 표시자 검색 0건. GitHub push 결과는 아래 줄에 적는다.
+- **push 결과**: Claude Code 환경에서 `git push origin main` 실행 시 GitHub 자격 증명이 없어 실패(`could not read Username`). 로컬 커밋 2개(`ff732fc`, CLAUDE.md 동기화 커밋)는 사용자가 직접 push해야 함. GitHub Pages 화면 복구는 미확인.
