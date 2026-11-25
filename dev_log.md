@@ -616,3 +616,4 @@
   - 저장소 버전에만 있던 6번 "개발 기록만 쓴다" 항목은 작업용 원본에 없어 빠졌다.
 - **검증**: 교체 후 `diff`로 작업용 원본과 내용이 같은지 확인. 저장소 내 충돌 표시자 검색 0건. GitHub push 결과는 아래 줄에 적는다.
 - **push 결과**: Claude Code 환경에서 `git push origin main` 실행 시 GitHub 자격 증명이 없어 실패(`could not read Username`). 로컬 커밋 2개(`ff732fc`, CLAUDE.md 동기화 커밋)는 사용자가 직접 push해야 함. GitHub Pages 화면 복구는 미확인.
+- **push 결과 보충**: 사용자가 `n072358421430` 계정으로 다시 로그인한 뒤 push 성공(`origin/main` = `e97f21f`). 처음 로그인한 `kimzezenim` 계정은 저장소 권한이 없어 403 오류가 났었다. `origin/main` 전체 파일에서 충돌 표시자 검색 0건. GitHub Pages 주소를 curl로 받아 보니 2446줄이고 충돌 표시자 0건이어서 v1.0.5 파일이 배포된 것을 확인했다. 브라우저 화면은 미확인.
