@@ -48,7 +48,6 @@
 5. **어느 파일인지 쓴다.** HTML 파일이 여러 개라 고친 파일명을 반드시 적는다.
    - `attendance-manager.html`: 현재 메인 버전
    - `attendance-manager_draft.html`, `attendance-manager_draft_backup.html`: 예전 버전
-   - `iPad_배포용/attendance-manager.html`: 이미지를 내장한 단일 파일 배포판 (메인 버전과 따로 갱신됨)
 
 ## 발표 자료 (presentation_notes.md)
 

@@ -106,6 +106,11 @@
                     <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
                     <span>출결 대시보드</span>
                 </button>
+                <button type="button" onclick="switchNavView('verify')" id="nav-verify"
+                    class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13px] whitespace-nowrap font-semibold text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition">
+                    <i data-lucide="clipboard-check" class="w-4 h-4"></i>
+                    <span>공식 출결 대조하기</span>
+                </button>
                 <button type="button" onclick="switchNavView('cert')" id="nav-cert"
                     class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13px] whitespace-nowrap font-semibold text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition">
                     <i data-lucide="file-check-2" class="w-4 h-4"></i>
@@ -391,6 +396,101 @@
                 </div>
 
                 <ul id="attList" class="divide-y divide-slate-100 text-xs max-h-[235px] overflow-y-auto pr-1.5 custom-slim-scroll"></ul>
+            </div>
+        </section>
+
+        <!-- ---------------------------------------------------- -->
+        <!-- VIEW 1-1: [공식 출결 대조하기] 고용24 공식 출결 기록 대조 안내 (이미지: guide_images/) -->
+        <!-- ---------------------------------------------------- -->
+        <section id="view-verify" class="space-y-6 hidden">
+            <div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">공식 출결 대조하기</h2>
+                <p class="text-xs text-slate-400 mt-1">공식 출결 기록은 '고용24 직업훈련 출결관리' 앱에 있습니다. 이 웹앱의 기록과 틈틈이 대조해 주세요.</p>
+            </div>
+
+            <div class="max-w-3xl mx-auto space-y-6">
+                <!-- 왜 대조해야 하나 -->
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-6 sm:p-8 space-y-3">
+                    <div class="text-sm font-bold text-amber-900 flex items-center gap-1.5"><i data-lucide="alert-triangle" class="w-4 h-4 shrink-0 text-amber-600"></i><span>이 웹앱만 믿지 마세요</span></div>
+                    <ul class="text-sm text-amber-900/90 space-y-1.5 list-disc pl-5">
+                        <li>이 웹앱은 고용노동부 출결 지침을 따르지만, 계산은 <b class="text-amber-950">직접 입력한 기록</b>으로 해요. 입력을 빠뜨리거나 잘못 넣으면 결과도 달라져요.</li>
+                        <li>수강생의 <b class="text-amber-950">공식 출결 기록</b>은 매일 QR 출결을 하는 <b class="text-amber-950">'고용24 직업훈련 출결관리'(이하 '고용24')</b> 앱의 캘린더에 남아요.</li>
+                        <li>기록이 다르면 이 웹앱의 기록을 '고용24' 기록에 맞추세요.</li>
+                        <li>'고용24' 기록에 의문이 있다면 <a href="https://discord.com/users/1427181154607435868" target="_blank" rel="noopener noreferrer" class="font-semibold text-teal-700 underline underline-offset-2 hover:text-teal-800">@과정운영팀</a> 디엠으로 문의하세요.</li>
+                    </ul>
+                </div>
+
+                <!-- 확인 방법 단계별 안내 -->
+                <div class="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-xs space-y-8">
+                    <div class="text-sm font-bold text-slate-800 flex items-center gap-1.5"><i data-lucide="smartphone" class="w-4 h-4 shrink-0 text-teal-700"></i><span>'고용24' 앱에서 내 출결 기록 확인하기</span></div>
+
+                    <div class="flex flex-col sm:flex-row gap-5 sm:items-start">
+                        <a href="guide_images/hrd_guide_0.jpg" target="_blank" rel="noopener" class="shrink-0 mx-auto sm:mx-0">
+                            <img src="guide_images/hrd_guide_0.jpg" alt="앱 스토어의 고용24 직업훈련 출결관리 앱 화면" loading="lazy" class="w-48 rounded-xl border border-slate-200 shadow-xs hover:opacity-90 transition" />
+                        </a>
+                        <div class="space-y-1.5">
+                            <div class="text-xs font-bold text-teal-700">STEP 1</div>
+                            <div class="text-base font-bold text-slate-900">'고용24 직업훈련 출결관리' 앱 열기</div>
+                            <p class="text-sm text-slate-600">매일 QR 출결에 쓰는 바로 그 앱이에요. 별도로 설치할 앱은 없어요.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-5 sm:items-start border-t border-slate-100 pt-8">
+                        <a href="guide_images/hrd_guide_1.jpg" target="_blank" rel="noopener" class="shrink-0 mx-auto sm:mx-0">
+                            <img src="guide_images/hrd_guide_1.jpg" alt="QR출결 화면에서 더보기를 눌러 나의출석보기를 선택하는 모습" loading="lazy" class="w-48 rounded-xl border border-slate-200 shadow-xs hover:opacity-90 transition" />
+                        </a>
+                        <div class="space-y-1.5">
+                            <div class="text-xs font-bold text-teal-700">STEP 2</div>
+                            <div class="text-base font-bold text-slate-900">QR출결 화면 → 더보기 → 나의출석보기</div>
+                            <p class="text-sm text-slate-600">매일 출결할 때 보는 QR출결 화면에서, 과정명 오른쪽 아래 <b class="text-slate-900">'더보기'</b>를 누르고 <b class="text-slate-900">'나의출석보기'</b>로 들어가요.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-5 sm:items-start border-t border-slate-100 pt-8">
+                        <a href="guide_images/hrd_guide_2.jpg" target="_blank" rel="noopener" class="shrink-0 mx-auto sm:mx-0">
+                            <img src="guide_images/hrd_guide_2.jpg" alt="나의 출석보기 화면의 훈련과정정보 표와 출석일 항목" loading="lazy" class="w-48 rounded-xl border border-slate-200 shadow-xs hover:opacity-90 transition" />
+                        </a>
+                        <div class="space-y-1.5">
+                            <div class="text-xs font-bold text-teal-700">STEP 3</div>
+                            <div class="text-base font-bold text-slate-900">총 출석일 확인</div>
+                            <p class="text-sm text-slate-600">훈련과정정보 표 맨 아래 <b class="text-slate-900">'출석일'</b>에서 전체 130일 중 지금까지 출석한 일수를 볼 수 있어요.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-5 sm:items-start border-t border-slate-100 pt-8">
+                        <a href="guide_images/hrd_guide_3.jpg" target="_blank" rel="noopener" class="shrink-0 mx-auto sm:mx-0">
+                            <img src="guide_images/hrd_guide_3.jpg" alt="나의 출석보기 화면 아래쪽의 출결 캘린더" loading="lazy" class="w-48 rounded-xl border border-slate-200 shadow-xs hover:opacity-90 transition" />
+                        </a>
+                        <div class="space-y-1.5">
+                            <div class="text-xs font-bold text-teal-700">STEP 4</div>
+                            <div class="text-base font-bold text-slate-900">아래로 내려 캘린더에서 날짜별 출결 확인</div>
+                            <p class="text-sm text-slate-600">화면을 아래로 내리면 캘린더가 있어요. 개강일인 <b class="text-slate-900">9월 29일</b>부터 날짜마다 출석·지각·조퇴·결석·휴가·공가 등 출결 상태가 표시돼요.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-5 sm:items-start border-t border-slate-100 pt-8">
+                        <a href="guide_images/hrd_guide_4.jpg" target="_blank" rel="noopener" class="shrink-0 mx-auto sm:mx-0">
+                            <img src="guide_images/hrd_guide_4.jpg" alt="나의 출석정보에서 연도와 월을 선택하는 화면" loading="lazy" class="w-48 rounded-xl border border-slate-200 shadow-xs hover:opacity-90 transition" />
+                        </a>
+                        <div class="space-y-1.5">
+                            <div class="text-xs font-bold text-teal-700">STEP 5</div>
+                            <div class="text-base font-bold text-slate-900">월을 바꿔 지난 기록 확인</div>
+                            <p class="text-sm text-slate-600">'나의 출석정보'에서 연도와 월을 선택하면 해당 월의 캘린더로 바뀌어요. 지난달 기록도 이렇게 확인할 수 있어요.</p>
+                        </div>
+                    </div>
+
+                    <p class="text-xs text-slate-400">※ 이미지를 누르면 크게 볼 수 있어요.</p>
+                </div>
+
+                <!-- 대조 포인트 -->
+                <div class="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-xs space-y-3">
+                    <div class="text-sm font-bold text-slate-800 flex items-center gap-1.5"><i data-lucide="list-checks" class="w-4 h-4 shrink-0 text-teal-700"></i><span>이렇게 대조해 보세요</span></div>
+                    <ul class="text-sm text-slate-600 space-y-1.5 list-disc pl-5">
+                        <li>'고용24' 캘린더의 날짜별 출결 상태가 <b class="text-slate-900">출결 대시보드의 기록 목록</b>과 같은지 확인해요.</li>
+                        <li>지각·조퇴·외출·결석·휴가·공가 중 <b class="text-slate-900">빠뜨리고 입력하지 않은 날</b>이 없는지 확인해요.</li>
+                        <li>월이 바뀔 때마다 한 번씩, 특히 <b class="text-slate-900">훈련장려금 확인서를 쓰기 전</b>에 확인하면 좋아요.</li>
+                    </ul>
+                </div>
             </div>
         </section>
 
@@ -890,7 +990,7 @@
         }
 
         function switchNavView(viewName) {
-            const views = ['dashboard', 'cert', 'vacation', 'ai'];
+            const views = ['dashboard', 'verify', 'cert', 'vacation', 'ai'];
             views.forEach(v => {
                 const viewEl = document.getElementById(`view-${v}`);
                 const navBtn = document.getElementById(`nav-${v}`);
